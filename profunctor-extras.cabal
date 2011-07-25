@@ -1,6 +1,6 @@
 name:          profunctor-extras
 category:      Control, Categories
-version:       0.1.1
+version:       0.1.2
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
@@ -26,5 +26,6 @@ library
 
   exposed-modules:
     Data.Profunctor.Composition
+    Data.Profunctor.Collage
 
   ghc-options:      -Wall 
