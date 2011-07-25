@@ -1,6 +1,6 @@
 name:          profunctor-extras
 category:      Control, Categories
-version:       0.3.0
+version:       0.3.1
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE

@@ -1,10 +1,11 @@
-{-# LANGUAGE GADTs, FlexibleInstances, UndecidableInstances #-}
+{-# LANGUAGE GADTs, FlexibleInstances, UndecidableInstances, MultiParamTypeClasses #-}
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 module Data.Profunctor.Collage 
   ( Collage(..)
   ) where
 
 import Data.Semigroupoid
+import Data.Semigroupoid.Ob
 import Data.Semigroupoid.Coproduct (L, R)
 import Data.Profunctor
 
@@ -19,3 +20,9 @@ instance Profunctor k => Semigroupoid (Collage k) where
   R f `o` R g = R (f . g) 
   R f `o` C g = C (rmap f g)
   C f `o` L g = C (lmap g f)
+
+instance Profunctor k => Ob (Collage k) (L a) where
+  semiid = L semiid
+
+instance Profunctor k => Ob (Collage k) (R a) where
+  semiid = R semiid
