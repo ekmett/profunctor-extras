@@ -1,13 +1,13 @@
 name:          profunctor-extras
 category:      Control, Categories
-version:       0.1
+version:       0.1.0.1
 license:       BSD3
 cabal-version: >= 1.6
 license-file:  LICENSE
 author:        Edward A. Kmett
 maintainer:    Edward A. Kmett <ekmett@gmail.com>
 stability:     experimental
-homepage:      git://github.com/ekmett/profunctors/
+homepage:      git://github.com/ekmett/profunctor-extras/
 copyright:     Copyright (C) 2011 Edward A. Kmett
 synopsis:      Profunctor extras
 description:   Profunctor extras
@@ -15,7 +15,7 @@ build-type:    Simple
 
 source-repository head
   type: git
-  location: git://github.com/ekmett/profunctors.git
+  location: git://github.com/ekmett/profunctor-extras.git
 
 library
   build-depends: 
