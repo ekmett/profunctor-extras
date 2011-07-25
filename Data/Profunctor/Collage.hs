@@ -1,10 +1,11 @@
 {-# LANGUAGE GADTs, FlexibleInstances, UndecidableInstances #-}
+{-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 module Data.Profunctor.Collage 
   ( Collage(..)
   ) where
 
 import Data.Semigroupoid
-import Data.Semigroupoid.Coproduct (L(..), R(..))
+import Data.Semigroupoid.Coproduct (L, R)
 import Data.Profunctor
 
 -- | The cograph of a profunctor
