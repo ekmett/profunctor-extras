@@ -1,6 +1,6 @@
 name:             profunctor-extras
 category:         Control, Categories
-version:          3.0
+version:          3.0.1
 license:          BSD3
 cabal-version:    >= 1.6
 license-file:     LICENSE
@@ -33,7 +33,7 @@ library
     semigroupoids       == 3.0.*,
     semigroupoid-extras == 3.0.*,
     comonad             == 3.0.*,
-    profunctors         == 3.0.*
+    profunctors         >= 3.0 && < 3.2
 
   exposed-modules:
     Data.Profunctor.Composition
