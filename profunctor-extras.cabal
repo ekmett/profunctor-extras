@@ -29,10 +29,12 @@ library
   hs-source-dirs: src
 
   other-extensions:
+    CPP
     GADTs
+    FlexibleContexts
     FlexibleInstances
     UndecidableInstances
-    MultiParamTypeClasses
+    TypeFamilies
 
   build-depends:
     base                == 4.*,

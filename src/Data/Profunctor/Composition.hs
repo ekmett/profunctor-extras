@@ -1,5 +1,6 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE TypeFamilies #-}
 #if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ >= 702
 {-# LANGUAGE Trustworthy #-}
 #endif
@@ -31,6 +32,7 @@ import Control.Comonad
 import Control.Monad (liftM)
 import Data.Functor.Compose
 import Data.Profunctor
+import Data.Profunctor.Rep
 import Data.Profunctor.Unsafe
 
 -- * Profunctor Composition
@@ -52,6 +54,17 @@ instance (Profunctor p, Profunctor q) => Profunctor (Procompose p q) where
 
 instance Profunctor q => Functor (Procompose p q a) where
   fmap k (Procompose f g) = Procompose f (rmap k g)
+
+-- | The composition of two representable profunctors is representable by the composition of their representations.
+instance (Representable p, Representable q) => Representable (Procompose p q) where
+  type Rep (Procompose p q) = Compose (Rep p) (Rep q)
+  tabulate f = Procompose (tabulate (getCompose . f)) (tabulate id)
+  rep (Procompose f g) d = Compose $ rep g <$> rep f d
+
+instance (Corepresentable p, Corepresentable q) => Corepresentable (Procompose p q) where
+  type Corep (Procompose p q) = Compose (Corep q) (Corep p)
+  cotabulate f = Procompose (cotabulate id) (cotabulate (f . Compose))
+  corep (Procompose f g) (Compose d) = corep g $ corep f <$> d
 
 -- * Lax identity
 

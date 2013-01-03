@@ -1,4 +1,3 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
@@ -11,7 +10,7 @@
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
 -- Stability   :  provisional
--- Portability :  MPTCs
+-- Portability :  Type-Families
 --
 ----------------------------------------------------------------------------
 module Data.Profunctor.Rep
@@ -24,10 +23,8 @@ module Data.Profunctor.Rep
 
 import Control.Arrow
 import Control.Comonad
-import Data.Functor.Compose
 import Data.Functor.Identity
 import Data.Profunctor
-import Data.Profunctor.Composition
 import Data.Proxy
 import Data.Tagged
 
@@ -54,12 +51,6 @@ instance Functor f => Representable (UpStar f) where
   type Rep (UpStar f) = f
   tabulate = UpStar
   rep = runUpStar
-
--- | The composition of two representable profunctors is representable by the composition of their representations.
-instance (Representable p, Representable q) => Representable (Procompose p q) where
-  type Rep (Procompose p q) = Compose (Rep p) (Rep q)
-  tabulate f = Procompose (tabulate (getCompose . f)) (tabulate id)
-  rep (Procompose f g) d = Compose $ rep g <$> rep f d
 
 -- | 'tabulate' and 'rep' form two halves of an isomorphism.
 --
@@ -99,11 +90,6 @@ instance Functor f => Corepresentable (DownStar f) where
   type Corep (DownStar f) = f
   cotabulate = DownStar
   corep = runDownStar
-
-instance (Corepresentable p, Corepresentable q) => Corepresentable (Procompose p q) where
-  type Corep (Procompose p q) = Compose (Corep q) (Corep p)
-  cotabulate f = Procompose (cotabulate id) (cotabulate (f . Compose))
-  corep (Procompose f g) (Compose d) = corep g $ corep f <$> d
 
 -- | 'cotabulate' and 'corep' form two halves of an isomorphism.
 --
