@@ -38,7 +38,7 @@ import Data.Profunctor.Unsafe
 -- * Profunctor Composition
 
 -- | @'Procompose' p q@ is the 'Profunctor' composition of the
--- profunctors @p@ and @q@.
+-- 'Profunctor's @p@ and @q@.
 --
 -- For a good explanation of 'Profunctor' composition in Haskell
 -- see Dan Piponi's article:
@@ -56,7 +56,7 @@ instance (Profunctor p, Profunctor q) => Profunctor (Procompose p q) where
 instance Profunctor q => Functor (Procompose p q a) where
   fmap k (Procompose f g) = Procompose f (rmap k g)
 
--- | The composition of two representable 'Profunctor's is representable by
+-- | The composition of two 'Representable' 'Profunctor's is 'Representable' by
 -- the composition of their representations.
 instance (Representable p, Representable q) => Representable (Procompose p q) where
   type Rep (Procompose p q) = Compose (Rep p) (Rep q)
