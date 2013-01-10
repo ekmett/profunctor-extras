@@ -14,6 +14,6 @@ module Data.Profunctor.Trace
   ( Trace(..)
   ) where
 
--- | Coend of 'Data.Profunctor.Profunctor' from @Hask -> Hask@
+-- | Coend of 'Data.Profunctor.Profunctor' from @Hask -> Hask@.
 data Trace f where
   Trace :: f a a -> Trace f

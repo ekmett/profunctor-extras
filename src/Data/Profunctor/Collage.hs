@@ -23,7 +23,7 @@ import Data.Semigroupoid.Ob
 import Data.Semigroupoid.Coproduct (L, R)
 import Data.Profunctor
 
--- | The cograph of a profunctor
+-- | The cograph of a 'Profunctor'.
 data Collage k b a where
   L :: (b -> b') -> Collage k (L b) (L b')
   R :: (a -> a') -> Collage k (R a) (R a')

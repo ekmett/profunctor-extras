@@ -30,7 +30,7 @@ import Data.Tagged
 
 -- * Representable Profunctors
 
--- | A 'Profunctor' @p@ is representable if there exists a 'Functor' @f@ such that
+-- | A 'Profunctor' @p@ is 'Representable' if there exists a 'Functor' @f@ such that
 -- @p d c@ is isomorphic to @d -> f c@.
 class (Functor (Rep p), Profunctor p) => Representable p where
   type Rep p :: * -> *
@@ -64,7 +64,7 @@ tabulated = dimap tabulate (fmap rep)
 
 -- * Corepresentable Profunctors
 
--- | A 'Profunctor' @p@ is corepresentable if there exists a 'Functor' @f@ such that
+-- | A 'Profunctor' @p@ is 'Corepresentable' if there exists a 'Functor' @f@ such that
 -- @p d c@ is isomorphic to @f d -> c@.
 class (Functor (Corep p), Profunctor p) => Corepresentable p where
   type Corep p :: * -> *
