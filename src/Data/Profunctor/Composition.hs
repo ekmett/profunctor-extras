@@ -37,9 +37,10 @@ import Data.Profunctor.Unsafe
 
 -- * Profunctor Composition
 
--- | @'Procompose' p q@ is the 'Profunctor' composition of the profunctors @p@ and @q@.
+-- | @'Procompose' p q@ is the 'Profunctor' composition of the
+-- 'Profunctor's @p@ and @q@.
 --
--- For a good explanation of profunctor composition in Haskell
+-- For a good explanation of 'Profunctor' composition in Haskell
 -- see Dan Piponi's article:
 --
 -- <http://blog.sigfpe.com/2011/07/profunctors-in-haskell.html>
@@ -62,7 +63,8 @@ instance Profunctor q => Functor (Procompose p q a) where
   fmap k (Procompose f g) = Procompose f (rmap k g)
   {-# INLINE fmap #-}
 
--- | The composition of two representable profunctors is representable by the composition of their representations.
+-- | The composition of two 'Representable' 'Profunctor's is 'Representable' by
+-- the composition of their representations.
 instance (Representable p, Representable q) => Representable (Procompose p q) where
   type Rep (Procompose p q) = Compose (Rep p) (Rep q)
   tabulate f = Procompose (tabulate (getCompose . f)) (tabulate id)
@@ -92,7 +94,7 @@ instance (Choice p, Choice q) => Choice (Procompose p q) where
 
 -- * Lax identity
 
--- | @(->)@ functions as a lax identity for profunctor composition.
+-- | @(->)@ functions as a lax identity for 'Profunctor' composition.
 --
 -- This provides an 'Iso' for the @lens@ package that witnesses the
 -- isomorphism between @'Procompose' (->) q d c@ and @q d c@, which
@@ -105,7 +107,7 @@ idl :: (Profunctor p, Profunctor q, Functor f)
     => p (q d c) (f (r d' c')) -> p (Procompose (->) q d c) (f (Procompose (->) r d' c'))
 idl = dimap (\(Procompose f g) -> lmap f g) (fmap (Procompose id))
 
--- | @(->)@ functions as a lax identity for profunctor composition.
+-- | @(->)@ functions as a lax identity for 'Profunctor' composition.
 --
 -- This provides an 'Iso' for the @lens@ package that witnesses the
 -- isomorphism between @'Procompose' q (->) d c@ and @q d c@, which
@@ -118,9 +120,10 @@ idr :: (Profunctor p, Profunctor q, Functor f)
     => p (q d c) (f (r d' c')) -> p (Procompose q (->) d c) (f (Procompose r (->) d' c'))
 idr = dimap (\(Procompose f g) -> rmap g f) (fmap (`Procompose` id))
 
--- | Profunctor composition generalizes functor composition in two ways.
+-- | 'Profunctor' composition generalizes 'Functor' composition in two ways.
 --
--- This is the first, which shows that @exists b. (a -> f b, b -> g c)@ is isomorphic to @a -> f (g c)@.
+-- This is the first, which shows that @exists b. (a -> f b, b -> g c)@ is
+-- isomorphic to @a -> f (g c)@.
 --
 -- @'upstars' :: 'Functor' f => Iso' ('Procompose' ('UpStar' f) ('UpStar' g) d c) ('UpStar' ('Compose' f g) d c)@
 upstars :: (Profunctor p, Functor f, Functor h)
@@ -130,9 +133,10 @@ upstars = dimap hither (fmap yon) where
   hither (Procompose (UpStar dfx) (UpStar xgc)) = UpStar (Compose . fmap xgc . dfx)
   yon (UpStar dfgc) = Procompose (UpStar (getCompose . dfgc)) (UpStar id)
 
--- | Profunctor composition generalizes functor composition in two ways.
+-- | 'Profunctor' composition generalizes 'Functor' composition in two ways.
 --
--- This is the second, which shows that @exists b. (f a -> b, g b -> c)@ is isomorphic to @g (f a) -> c@.
+-- This is the second, which shows that @exists b. (f a -> b, g b -> c)@ is
+-- isomorphic to @g (f a) -> c@.
 --
 -- @'downstars' :: 'Functor' f => Iso' ('Procompose' ('DownStar' f) ('DownStar' g) d c) ('DownStar' ('Compose' g f) d c)@
 downstars :: (Profunctor p, Functor g, Functor h)
@@ -152,7 +156,8 @@ kleislis = dimap hither (fmap yon) where
   hither (Procompose (Kleisli dfx) (Kleisli xgc)) = Kleisli (Compose . liftM xgc . dfx)
   yon (Kleisli dfgc) = Procompose (Kleisli (getCompose . dfgc)) (Kleisli id)
 
--- | This is a variant on 'downstars' that uses 'Cokleisli' instead of 'DownStar'.
+-- | This is a variant on 'downstars' that uses 'Cokleisli' instead
+-- of 'DownStar'.
 --
 -- @'cokleislis' :: 'Functor' f => Iso' ('Procompose' ('Cokleisli' f) ('Cokleisli' g) d c) ('Cokleisli' ('Compose' g f) d c)@
 cokleislis :: (Profunctor p, Functor g, Functor h)
