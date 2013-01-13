@@ -40,17 +40,23 @@ class (Functor (Rep p), Profunctor p) => Representable p where
 instance Representable (->) where
   type Rep (->) = Identity
   tabulate f = runIdentity . f
+  {-# INLINE tabulate #-}
   rep f = Identity . f
+  {-# INLINE rep #-}
 
 instance (Monad m, Functor m) => Representable (Kleisli m) where
   type Rep (Kleisli m) = m
   tabulate = Kleisli
+  {-# INLINE tabulate #-}
   rep = runKleisli
+  {-# INLINE rep #-}
 
 instance Functor f => Representable (UpStar f) where
   type Rep (UpStar f) = f
   tabulate = UpStar
+  {-# INLINE tabulate #-}
   rep = runUpStar
+  {-# INLINE rep #-}
 
 -- | 'tabulate' and 'rep' form two halves of an isomorphism.
 --
@@ -61,6 +67,7 @@ tabulated :: (Profunctor r, Functor f, Representable p, Representable q)
           => r (p d c) (f (q d' c'))
           -> r (d -> Rep p c) (f (d' -> Rep q c'))
 tabulated = dimap tabulate (fmap rep)
+{-# INLINE tabulated #-}
 
 -- * Corepresentable Profunctors
 
@@ -74,22 +81,30 @@ class (Functor (Corep p), Profunctor p) => Corepresentable p where
 instance Corepresentable (->) where
   type Corep (->) = Identity
   cotabulate f = f . Identity
+  {-# INLINE cotabulate #-}
   corep f (Identity d) = f d
+  {-# INLINE corep #-}
 
 instance Functor w => Corepresentable (Cokleisli w) where
   type Corep (Cokleisli w) = w
   cotabulate = Cokleisli
+  {-# INLINE cotabulate #-}
   corep = runCokleisli
+  {-# INLINE corep #-}
 
 instance Corepresentable Tagged where
   type Corep Tagged = Proxy
   cotabulate f = Tagged (f Proxy)
+  {-# INLINE cotabulate #-}
   corep (Tagged a) _ = a
+  {-# INLINE corep #-}
 
 instance Functor f => Corepresentable (DownStar f) where
   type Corep (DownStar f) = f
   cotabulate = DownStar
+  {-# INLINE cotabulate #-}
   corep = runDownStar
+  {-# INLINE corep #-}
 
 -- | 'cotabulate' and 'corep' form two halves of an isomorphism.
 --
@@ -100,3 +115,4 @@ cotabulated :: (Profunctor r, Functor h, Corepresentable p, Corepresentable q)
           => r (p d c) (h (q d' c'))
           -> r (Corep p d -> c) (h (Corep q d' -> c'))
 cotabulated = dimap cotabulate (fmap corep)
+{-# INLINE cotabulated #-}

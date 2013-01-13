@@ -47,24 +47,48 @@ data Procompose p q d c where
   Procompose :: p d a -> q a c -> Procompose p q d c
 
 instance (Profunctor p, Profunctor q) => Profunctor (Procompose p q) where
+  dimap l r (Procompose f g) = Procompose (lmap l f) (rmap r g)
+  {-# INLINE dimap #-}
   lmap k (Procompose f g) = Procompose (lmap k f) g
+  {-# INLINE rmap #-}
   rmap k (Procompose f g) = Procompose f (rmap k g)
+  {-# INLINE lmap #-}
   k #. Procompose f g     = Procompose f (k #. g)
+  {-# INLINE ( #. ) #-}
   Procompose f g .# k     = Procompose (f .# k) g
+  {-# INLINE ( .# ) #-}
 
 instance Profunctor q => Functor (Procompose p q a) where
   fmap k (Procompose f g) = Procompose f (rmap k g)
+  {-# INLINE fmap #-}
 
 -- | The composition of two representable profunctors is representable by the composition of their representations.
 instance (Representable p, Representable q) => Representable (Procompose p q) where
   type Rep (Procompose p q) = Compose (Rep p) (Rep q)
   tabulate f = Procompose (tabulate (getCompose . f)) (tabulate id)
+  {-# INLINE tabulate #-}
   rep (Procompose f g) d = Compose $ rep g <$> rep f d
+  {-# INLINE rep #-}
 
 instance (Corepresentable p, Corepresentable q) => Corepresentable (Procompose p q) where
   type Corep (Procompose p q) = Compose (Corep q) (Corep p)
   cotabulate f = Procompose (cotabulate id) (cotabulate (f . Compose))
+  {-# INLINE cotabulate #-}
   corep (Procompose f g) (Compose d) = corep g $ corep f <$> d
+  {-# INLINE corep #-}
+
+instance (Strong p, Strong q) => Strong (Procompose p q) where
+  first' (Procompose x y) = Procompose (first' x) (first' y)
+  {-# INLINE first' #-}
+  second' (Procompose x y) = Procompose (second' x) (second' y)
+  {-# INLINE second' #-}
+
+instance (Choice p, Choice q) => Choice (Procompose p q) where
+  left' (Procompose x y) = Procompose (left' x) (left' y)
+  {-# INLINE left' #-}
+  right' (Procompose x y) = Procompose (right' x) (right' y)
+  {-# INLINE right' #-}
+
 
 -- * Lax identity
 
