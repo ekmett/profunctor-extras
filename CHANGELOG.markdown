@@ -1,3 +1,7 @@
+3.3.1
+-----
+* Marked `Data.Profunctor.Collage` and `Data.Profunctor.Rep` as `Trustworthy`
+
 3.2.1
 -----
 * Removed upper bounds on my own intra-package dependencies
