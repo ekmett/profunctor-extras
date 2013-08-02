@@ -1,3 +1,7 @@
+3.3.3.1
+-------
+* Fix to enable clean building with HLint's overly simplistic parser.
+
 3.3.3
 -----
 * Added `Data.Profunctor.Rift`, which provides the right Kan lift of a `Profunctor` along another `Profunctor`.
