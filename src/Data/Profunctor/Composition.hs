@@ -19,6 +19,7 @@ module Data.Profunctor.Composition
   (
   -- * Profunctor Composition
     Procompose(..)
+  , procomposed
   -- * Lax identity
   , idl
   , idr
@@ -28,12 +29,14 @@ module Data.Profunctor.Composition
   ) where
 
 import Control.Arrow
+import Control.Category
 import Control.Comonad
 import Control.Monad (liftM)
 import Data.Functor.Compose
 import Data.Profunctor
 import Data.Profunctor.Rep
 import Data.Profunctor.Unsafe
+import Prelude hiding ((.),id)
 
 -- * Profunctor Composition
 
@@ -46,6 +49,11 @@ import Data.Profunctor.Unsafe
 -- <http://blog.sigfpe.com/2011/07/profunctors-in-haskell.html>
 data Procompose p q d c where
   Procompose :: p d a -> q a c -> Procompose p q d c
+
+procomposed :: Category p => Procompose p p a b -> p a b
+procomposed (Procompose pda pac) = pac . pda
+{-# INLINE procomposed #-}
+
 
 instance (Profunctor p, Profunctor q) => Profunctor (Procompose p q) where
   dimap l r (Procompose f g) = Procompose (lmap l f) (rmap r g)
