@@ -18,7 +18,7 @@
 module Data.Profunctor.Rift
   ( Rift(..)
   , decomposeRift
-  , theta
+  , precomposeRift
   ) where
 
 import Control.Category
@@ -59,6 +59,6 @@ decomposeRift :: Procompose q (Rift q p) a b -> p a b
 decomposeRift (Procompose q (Rift qp)) = qp q
 {-# INLINE decomposeRift #-}
 
-theta :: Profunctor q => Procompose (Rift p (->)) q a b -> Rift p q a b
-theta (Procompose pf p) = Rift (\pxa -> runRift pf pxa `lmap` p)
-{-# INLINE theta #-}
+precomposeRift :: Profunctor q => Procompose (Rift p (->)) q a b -> Rift p q a b
+precomposeRift (Procompose pf p) = Rift (\pxa -> runRift pf pxa `lmap` p)
+{-# INLINE precomposeRift #-}
