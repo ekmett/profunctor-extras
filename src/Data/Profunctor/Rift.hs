@@ -37,7 +37,7 @@ instance (Profunctor p, Profunctor q) => Profunctor (Rift p q) where
   rmap bd f = Rift (rmap bd . runRift f)
   {-# INLINE rmap #-}
   bd #. f = Rift (\p -> bd #. runRift f p)
-  {-# INLINE (#.) #-}
+  {-# INLINE ( #. ) #-}
   f .# ca = Rift (\p -> runRift f (ca #. p))
   {-# INLINE (.#) #-}
 
