@@ -1,5 +1,7 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE Rank2Types #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE ImplicitParams #-}
 #if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ >= 702
 {-# LANGUAGE Trustworthy #-}
 #endif
@@ -15,11 +17,16 @@
 ----------------------------------------------------------------------------
 module Data.Profunctor.Rift
   ( Rift(..)
+  , decomposeRift
+  , theta
   ) where
 
+import Control.Category
 import Data.Profunctor.Unsafe
+import Data.Profunctor.Composition
+import Prelude hiding (id,(.))
 
--- | This represents the right Kan lift of a 'Profunctor' q along a 'Profunctor' p.
+-- | This represents the right Kan lift of a 'Profunctor' @q@ along a 'Profunctor' @p@ in a limited version of the 2-category of Profunctors where the only object is the category Hask, 1-morphisms are profunctors composed and compose with Profunctor composition, and 2-morphisms are just natural transformations.
 newtype Rift p q a b = Rift { runRift :: forall x. p x a -> q x b }
 
 instance (Profunctor p, Profunctor q) => Profunctor (Rift p q) where
@@ -37,3 +44,21 @@ instance (Profunctor p, Profunctor q) => Profunctor (Rift p q) where
 instance Profunctor q => Functor (Rift p q a) where
   fmap bd f = Rift (rmap bd . runRift f)
   {-# INLINE fmap #-}
+
+-- | @'Rift' p p@ forms a 'Monad' in the 'Profunctor' 2-category, which is isomorphic to a Haskell 'Category' instance.
+instance p ~ q => Category (Rift p q) where
+  id = Rift id
+  {-# INLINE id #-}
+  Rift f . Rift g = Rift (f . g)
+  {-# INLINE (.) #-}
+
+-- | The 2-morphism that defines a right Kan lift.
+--
+-- Note: When @f@ is left adjoint to @'Rift' f (->)@ then 'decomposeRift' is the 'counit' of the adjunction.
+decomposeRift :: Procompose q (Rift q p) a b -> p a b
+decomposeRift (Procompose q (Rift qp)) = qp q
+{-# INLINE decomposeRift #-}
+
+theta :: Profunctor q => Procompose (Rift p (->)) q a b -> Rift p q a b
+theta (Procompose pf p) = Rift (\pxa -> runRift pf pxa `lmap` p)
+{-# INLINE theta #-}
