@@ -1,3 +1,7 @@
+3.3.3
+-----
+* Added `Data.Profunctor.Rift`, which provides the right Kan lift of a `Profunctor` along another `Profunctor`.
+
 3.3.1
 -----
 * Marked `Data.Profunctor.Collage` and `Data.Profunctor.Rep` as `Trustworthy`
