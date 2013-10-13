@@ -1,3 +1,7 @@
+4.0
+---
+* This package has been absorbed into `profunctors` 4.0
+
 3.3.3.1
 -------
 * Fix to enable clean building with HLint's overly simplistic parser.
